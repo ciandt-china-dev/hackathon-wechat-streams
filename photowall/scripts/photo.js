@@ -2,7 +2,7 @@
     $(function() {
         $('.card img').on('click', function() {
             // get img clicked img url
-            var imgSrc = $(this).find('img').attr('src');
+            var imgSrc = $(this).attr('src');
             var modalImg = $('.ui.modal').find('img');
             modalImg.attr('src', imgSrc);
             $('.ui.modal').modal('show');
