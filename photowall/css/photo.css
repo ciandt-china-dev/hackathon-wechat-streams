@@ -6,9 +6,22 @@ img {
     max-width: 100%;
 }
 .ui.three.stackable.cards {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 .modal img {
     width: 100%;
     height: 100%;
+}
+@media only screen and (max-width: 767px) {
+    .ui.modal .content>.image {
+        padding: 0 0 0!important;
+    }
+}
+#back-top {
+    opacity: .5;
+    font-size: 2rem;
+    position: fixed;
+    bottom: 10%;
+    right: 0;
+    display: none;
 }
