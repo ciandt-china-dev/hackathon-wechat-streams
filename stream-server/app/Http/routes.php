@@ -19,7 +19,7 @@ $app->get('/', function () use ($app) {
 /**
  * Verify wechat
  */
-$app->get('/streams', function (Illuminate\Http\Request $request) use ($app) {
+$app->get('/api/streams', function (Illuminate\Http\Request $request) use ($app) {
     $wxcpt = new WechatEnterprise\WXBizMsgCrypt(
         env('WECHATENTERPRISE_TOKEN'),
         env('WECHATENTERPRISE_AESKEY'),
@@ -44,6 +44,6 @@ $app->get('/streams', function (Illuminate\Http\Request $request) use ($app) {
 /**
  * Handler wechat response and trigger proper methods
  */
-$app->post('/streams', function() use ($app) {
+$app->post('/api/streams', function() use ($app) {
 
 });
