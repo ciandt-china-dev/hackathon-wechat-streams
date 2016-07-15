@@ -1,0 +1,14 @@
+body {
+    background: #fafafa;
+    overflow: auto;
+}
+img {
+    max-width: 100%;
+}
+.ui.three.stackable.cards {
+  margin-top: 1rem;
+}
+.modal img {
+    width: 100%;
+    height: 100%;
+}
