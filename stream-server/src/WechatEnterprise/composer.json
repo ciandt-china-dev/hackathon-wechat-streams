@@ -1,0 +1,14 @@
+{
+    "name": "ciandt/wechatenterprise",
+    "description": "Wechat enterprise module",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Xiadan Wang",
+            "email": "xiaodan.w@outlook.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
