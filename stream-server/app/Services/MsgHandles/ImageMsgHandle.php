@@ -20,6 +20,6 @@ class ImageMsgHandle extends BaseMsgHandle
       'storeOnLocal' => false,
     ]);
 
-    return $this->renderResponseMsg('Your image id: ' . $image->id);
+    return $this->renderResponseMsg("Your image id: $image->id. Your can tag the image with /ImgId #tag1 #tag2. Not using this format will be ignored.");
   }
 }

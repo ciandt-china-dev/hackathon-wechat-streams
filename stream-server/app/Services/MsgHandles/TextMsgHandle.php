@@ -19,7 +19,9 @@ class TextMsgHandle extends BaseMsgHandle
             $tags = $match('/#(\w+)/');
             return $this->renderResponseMsg($this->attachTags($imageId, $tags));
         } else {
-            return $this->renderResponseMsg('Err: format error, should like "/123 #tag1 #tag2 #tag3"');
+            // todo: a better type of logic to determine if user wants to tag but without using correct format
+            // Ignoring the invalid tags to avoid annoying error message.
+            //return $this->renderResponseMsg('Err: format error, should like "/123 #tag1 #tag2 #tag3"');
         }
     }
 
@@ -29,13 +31,16 @@ class TextMsgHandle extends BaseMsgHandle
             return "Err: image id '$imageId' not found";
         }
 
-        $existTags = Tag::whereIn('label', $tags)->pluck('label')->all();
+        $existTagsPlucked = Tag::whereIn('label', $tags)->pluck('label', 'id')->all();
+        $existTags = array_values($existTagsPlucked);
+        $existTagIds = array_keys($existTagsPlucked);
 
-        $newTags = array_map(function ($label) {
+        $newTags = array_diff($tags, $existTags);
+        $newTagIds = array_map(function ($label) {
             return Tag::create(['label' => $label])->id;
-        }, array_diff($tags, $existTags));
+        }, $newTags);
 
-        $image->tags()->sync($newTags);
+        $image->tags()->sync(array_merge($newTagIds, $existTagIds));
 
         $tags = $image->tags->pluck('label')->all();
         $tags = implode(', ', $tags);
