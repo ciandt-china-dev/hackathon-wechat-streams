@@ -32,7 +32,7 @@
                 var html = "",
                     $container = $('.cards');
                 $.ajax({
-                    url: '',
+                    url: 'http://localhost:3000/db',
                     type: 'GET',
                     success: function(data) {
                         for (var i = 0; i < data.length; i++) {
