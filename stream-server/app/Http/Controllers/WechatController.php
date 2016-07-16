@@ -69,7 +69,7 @@ class WechatController extends Controller
           $handle = new MsgHandles\ImageMsgHandle();
           break;
       }
-      
+
       $msg = $handle->setXml($xml)->exec();
 
       //error_log($msg);

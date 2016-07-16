@@ -2,56 +2,58 @@
 
 namespace App\Services\MsgHandles;
 
-use App\Models;
+use App\Models\Image;
+use App\Models\Tag;
 
 /**
  *
  */
 class TextMsgHandle extends BaseMsgHandle
 {
-
     public function exec()
     {
         $content = $this->xmlPick('Content');
         $match = $this->match($content);
 
-        if ($match('//', false)) {
-            $imageId = reset($match('//'));
-            $tags = $match('//');
-
-            return $this->renderResponseMsg($this->attchTags($imageId, $tags));
-
+        if ($imageId = $match('/\/(\d+)/', false)) {
+            $tags = $match('/#(\w+)/');
+            return $this->renderResponseMsg($this->attachTags($imageId, $tags));
         } else {
-            return $this->renderResponseMsg('Err: format error, should like "%123 #tag1 #tag2 #tag3"');
+            return $this->renderResponseMsg('Err: format error, should like "/123 #tag1 #tag2 #tag3"');
         }
     }
 
-    private function attchTags($imageId, $tags)
+    private function attachTags($imageId, $tags)
     {
         if (!($image = Image::find($imageId))) {
             return "Err: image id '$imageId' not found";
         }
 
-        $extistTags = Tag::whereIn('label', $tags)->pluck('label');
+        $existTags = Tag::whereIn('label', $tags)->pluck('label')->all();
 
         $newTags = array_map(function ($label) {
             return Tag::create(['label' => $label])->id;
-        }, array_diff($tags, $extistTags));
+        }, array_diff($tags, $existTags));
 
-        $image->tags->sync($newTags);
+        $image->tags()->sync($newTags);
 
-        $tags = $image->tags->pluck('label');
+        $tags = $image->tags->pluck('label')->all();
         $tags = implode(', ', $tags);
 
-        return "image $imageId has tags: [$tags]";
+        return "Image ($imageId) has tags: [$tags]";
     }
 
     private function match($subject)
     {
         return function ($patten, $all = true) use ($subject) {
-            $matched = [];
             $func = $all ? 'preg_match_all' : 'preg_match';
-            return $func($patten, $subject, $matched) && (count($matched) > 1) ? $matched[1] : false;
+
+            $matched = [];
+            if ($func($patten, $subject, $matched) !== false && count($matched) > 1) {
+                return $matched[1];
+            }
+
+            return false;
         };
     }
 }
