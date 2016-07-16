@@ -2,7 +2,7 @@
 
 namespace App\Services\MsgHandles;
 
-use App\Models;
+use App\Models\Image;
 
 /**
 *
@@ -10,7 +10,7 @@ use App\Models;
 class ImageMsgHandle extends BaseMsgHandle
 {
 
-  public function exec(\DOMDocument $xml)
+  public function exec()
   {
     $image = Image::create([
       'picUrl' => $this->xmlPick('PicUrl'),
@@ -20,6 +20,6 @@ class ImageMsgHandle extends BaseMsgHandle
       'storeOnLocal' => false,
     ]);
 
-    return $this->renderReposneMsg('Your image id: ' . $image->id);
+    return $this->renderResponseMsg('Your image id: ' . $image->id);
   }
 }

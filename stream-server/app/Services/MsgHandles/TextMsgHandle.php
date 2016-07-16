@@ -5,55 +5,53 @@ namespace App\Services\MsgHandles;
 use App\Models;
 
 /**
-*
-*/
+ *
+ */
 class TextMsgHandle extends BaseMsgHandle
 {
 
-  public function exec(\DOMDocument $xml)
-  {
-    $content = $this->xmlPick('content');
-    $match = $this->match($content);
-
-    if ($match('//', false)) {
-      $imageId = reset($match('//'));
-      $tags = $match('//');
-
-      return $this->attchTags($imageId, $tags);
-
-    } else {
-      return 'Err: format error, should like "%123 #tag1 #tag2 #tag3"';
-    }
-  }
-
-  private function attchTags($imageId, $tags)
-  {
-    if (!($image = Image::find($imageId)))
+    public function exec()
     {
-      return "Err: image id '$imageId' not found";
+        $content = $this->xmlPick('Content');
+        $match = $this->match($content);
+
+        if ($match('//', false)) {
+            $imageId = reset($match('//'));
+            $tags = $match('//');
+
+            return $this->renderResponseMsg($this->attchTags($imageId, $tags));
+
+        } else {
+            return $this->renderResponseMsg('Err: format error, should like "%123 #tag1 #tag2 #tag3"');
+        }
     }
 
-    $extistTags = Tag::whereIn('label', $tags)->pluck('label');
+    private function attchTags($imageId, $tags)
+    {
+        if (!($image = Image::find($imageId))) {
+            return "Err: image id '$imageId' not found";
+        }
 
-    $newTags = array_map(function($label) {
-      return Tag::create(['label' => $label])->id;
-    }, array_diff($tags, $extistTags));
+        $extistTags = Tag::whereIn('label', $tags)->pluck('label');
 
-    $image->tags->sync($newTags);
+        $newTags = array_map(function ($label) {
+            return Tag::create(['label' => $label])->id;
+        }, array_diff($tags, $extistTags));
 
-    $tags = $image->tags->pluck('label');
-    $tags = implode(', ', $tags);
+        $image->tags->sync($newTags);
 
-    return "image $imageId has tags: [$tags]";
-  }
+        $tags = $image->tags->pluck('label');
+        $tags = implode(', ', $tags);
 
-  private function match($subject)
-  {
-    return function($patten, $all = true) use ($subject) {
-      $fun = $all ? 'preg_match_all' : 'preg_match';
-      $matched = $fun($patten, $subject, $match);
+        return "image $imageId has tags: [$tags]";
+    }
 
-      return $fun($patten, $subject, $match) ? $match[1] : false;
-    };
-  }
+    private function match($subject)
+    {
+        return function ($patten, $all = true) use ($subject) {
+            $matched = [];
+            $func = $all ? 'preg_match_all' : 'preg_match';
+            return $func($patten, $subject, $matched) && (count($matched) > 1) ? $matched[1] : false;
+        };
+    }
 }

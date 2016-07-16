@@ -69,8 +69,12 @@ class WechatController extends Controller
           $handle = new MsgHandles\ImageMsgHandle();
           break;
       }
-      $msg = $handle->set($xml)->exec();
+      
+      $msg = $handle->setXml($xml)->exec();
 
+      //error_log($msg);
+
+      $sEncryptMsg = '';
       $errCode = $this->wxcpt->EncryptMsg($msg, $sReqTimeStamp, $sReqNonce, $sEncryptMsg);
       if ($errCode == 0) {
         return $sEncryptMsg;
