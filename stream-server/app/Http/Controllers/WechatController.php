@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\MsgHandles;
+use WechatEnterprise;
 
 class WechatController extends Controller
 {
@@ -51,6 +52,7 @@ class WechatController extends Controller
     $sReqData = file_get_contents('php://input');
 
     $errCode = $this->wxcpt->DecryptMsg($sReqMsgSig, $sReqTimeStamp, $sReqNonce, $sReqData, $sMsg);
+
     if ($errCode == 0)
     {
       $xml = new \DOMDocument();
@@ -61,15 +63,15 @@ class WechatController extends Controller
       $handle = null;
       switch ($msgType) {
         case 'text':
-          $handle = new TextMsgHandle();
+          $handle = new MsgHandles\TextMsgHandle();
           break;
         case 'image':
-          $handle = new ImageMsgHandle();
+          $handle = new MsgHandles\ImageMsgHandle();
           break;
       }
       $msg = $handle->set($xml)->exec();
 
-      $errCode = $wxcpt->EncryptMsg($sRespData, $sReqTimeStamp, $sReqNonce, $sEncryptMsg);
+      $errCode = $this->wxcpt->EncryptMsg($msg, $sReqTimeStamp, $sReqNonce, $sEncryptMsg);
       if ($errCode == 0) {
         return $sEncryptMsg;
       }

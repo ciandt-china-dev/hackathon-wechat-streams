@@ -10,7 +10,7 @@ use App\Models;
 class ImageMsgHandle extends BaseMsgHandle
 {
 
-  function exec(\DOMDocument xml)
+  public function exec(\DOMDocument $xml)
   {
     $image = Image::create([
       'picUrl' => $this->xmlPick('PicUrl'),

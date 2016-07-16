@@ -10,7 +10,7 @@ use App\Models;
 class TextMsgHandle extends BaseMsgHandle
 {
 
-  function exec(\DOMDocument xml)
+  public function exec(\DOMDocument $xml)
   {
     $content = $this->xmlPick('content');
     $match = $this->match($content);
@@ -47,8 +47,6 @@ class TextMsgHandle extends BaseMsgHandle
     return "image $imageId has tags: [$tags]";
   }
 
-
-
   private function match($subject)
   {
     return function($patten, $all = true) use ($subject) {
@@ -56,6 +54,6 @@ class TextMsgHandle extends BaseMsgHandle
       $matched = $fun($patten, $subject, $match);
 
       return $fun($patten, $subject, $match) ? $match[1] : false;
-    }
+    };
   }
 }

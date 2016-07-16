@@ -18,14 +18,14 @@ class BaseMsgHandle implements MsgHandleInterface
 
   protected $xmlPick;
 
-  public function exec()
+  public function exec(\DOMDocument $xml)
   {
     return '';
   }
 
   public function setXml(\DOMDocument $xml)
   {
-    $this->xmlPick = function($tag) use (xml){
+    $this->xmlPick = function($tag) use ($xml){
       $xml->getElementsByTagName($tag)[0]->nodeValue;
     };
 
