@@ -30,10 +30,10 @@ class CreateTables extends Migration
 
         Schema::create('image_tag', function (Blueprint $table) {
             $table->integer('image_id')->unsigned()->index();
-            $table->foreign('image_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
 
             $table->integer('tag_id')->unsigned()->index();
-            $table->foreign('tag_id')->references('id')->on('images')->onDelete('cascade');
+            $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
             $table->timestamps();
         });
     }
