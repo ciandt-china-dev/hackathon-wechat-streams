@@ -16,7 +16,7 @@ class TextMsgHandle extends BaseMsgHandle
         $match = $this->match($content);
 
         if ($imageId = $match('/\/(\d+)/', false)) {
-            $tags = $match('/#(\w+)/');
+            $tags = $match('/#(\\w+)/u');
             return $this->renderResponseMsg($this->attachTags($imageId, $tags));
         } else {
             // todo: a better type of logic to determine if user wants to tag but without using correct format
@@ -40,7 +40,7 @@ class TextMsgHandle extends BaseMsgHandle
             return Tag::create(['label' => $label])->id;
         }, $newTags);
 
-        $image->tags()->sync(array_merge($newTagIds, $existTagIds));
+        $image->tags()->sync(array_merge($newTagIds, $existTagIds), false);
 
         $tags = $image->tags->pluck('label')->all();
         $tags = implode(', ', $tags);
