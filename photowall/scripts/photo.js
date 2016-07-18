@@ -31,7 +31,7 @@
             $container = $('.cards');
         $.ajax({
             url: 'http://hackathon-wx3.ciandt.cn/api/photos/all',
-            type: 'POST',
+            type: 'GET',
             success: function(data) {
                 for (var i = 0; i < data.length; i++) {
                     var tagHTML = "";
