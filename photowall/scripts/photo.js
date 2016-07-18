@@ -48,7 +48,7 @@
                                 tagHTML += '<a href="#" data-tag="' + data[i].tags[j].label + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
                             }
                         }
-                        html += '<div class="card"><div class="image"><img src="' +
+                        html = '<div class="card"><div class="image"><img src="' +
                             data[i].picUrl +
                             '"></div><div class="content"><a class="header">' +
                             data[i].wxUser +
@@ -58,7 +58,6 @@
                             tagHTML +
                             '</div></div>';
                     }
-                    $container.empty();
                     $container.html(html);
                 },
             });
