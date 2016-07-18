@@ -36,14 +36,22 @@
                     type: 'GET',
                     success: function(data) {
                         for (var i = 0; i < data.length; i++) {
+                            var tagHTML = "";
+                            if (data[i].tags) {
+                                for (var j = 0; j < data[i].tags.length;  j++) {
+                                    tagHTML += '<a href="/api/photos/{' + data[i].tags[j] + '}">' + data[i].tags[j]+ '</a>';
+                                }
+                            }
                             html += '<div class="card"><div class="image"><img src="' +
-                                data[i].url +
+                                data[i].picUrl +
                                 '"></div><div class="content"><a class="header">' +
-                                data[i].name +
+                                data[i].wxUser +
                                 '</a><div class="meta"><span class="date">' +
-                                data[i].date +
-                                '</span></div><div class="description">' +
-                                data[i].tag +
+                                data[i].updated_at +
+                                '</span></div>' +
+                                tagHTML +
+                                '<div class="description">' +
+                                tagHTML +
                                 '</div></div></div>';
                         }
                         $container.append(html);
