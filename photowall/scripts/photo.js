@@ -29,29 +29,40 @@
         // });
         var html = "",
             $container = $('.cards');
-        $.ajax({
-            url: 'http://hackathon-wx3.ciandt.cn/api/photos/all',
-            type: 'GET',
-            success: function(data) {
-                for (var i = 0; i < data.length; i++) {
-                    var tagHTML = "";
-                    if (data[i].tags) {
-                        for (var j = 0; j < data[i].tags.length; j++) {
-                            tagHTML += '<a href="/api/photos/' + data[i].tags[j].label + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
-                        }
-                    }
-                    html += '<div class="card"><div class="image"><img src="' +
-                        data[i].picUrl +
-                        '"></div><div class="content"><a class="header">' +
-                        data[i].wxUser +
-                        '</a><div class="meta"><span class="date">' +
-                        data[i].updated_at +
-                        '</span></div>' +
-                        tagHTML +
-                        '</div></div>';
-                }
-                $container.append(html);
-            },
+
+        $('a[data-tag]').on('click', function(evt) {
+            evt.preventDefault();
+            var tag = $(this).data('tag');
+            render(tag);
         });
+
+        var render = function(tag) {
+            $.ajax({
+                url: 'http://hackathon-wx3.ciandt.cn/api/photos/' + tag,
+                type: 'GET',
+                success: function(data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var tagHTML = "";
+                        if (data[i].tags) {
+                            for (var j = 0; j < data[i].tags.length; j++) {
+                                tagHTML += '<a href="#" data-tag="' + data[i].tags[j] + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
+                            }
+                        }
+                        html += '<div class="card"><div class="image"><img src="' +
+                            data[i].picUrl +
+                            '"></div><div class="content"><a class="header">' +
+                            data[i].wxUser +
+                            '</a><div class="meta"><span class="date">' +
+                            data[i].updated_at +
+                            '</span></div>' +
+                            tagHTML +
+                            '</div></div>';
+                    }
+                    $container.append(html);
+                },
+            });
+        }
+
+        render('all');
     });
 })(jQuery);
