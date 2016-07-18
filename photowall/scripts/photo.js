@@ -58,6 +58,7 @@
                             tagHTML +
                             '</div></div>';
                     }
+                    $container.empty();
                     $container.html(html);
                 },
             });
