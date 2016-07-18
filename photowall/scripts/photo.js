@@ -30,7 +30,7 @@
         var html = "",
             $container = $('.cards');
 
-        $('a[data-tag]').on('click', function(evt) {
+        $('.cards').delegate('a[data-tag]', 'click', function(evt){
             evt.preventDefault();
             var tag = $(this).data('tag');
             render(tag);
@@ -45,7 +45,7 @@
                         var tagHTML = "";
                         if (data[i].tags) {
                             for (var j = 0; j < data[i].tags.length; j++) {
-                                tagHTML += '<a href="#" data-tag="' + data[i].tags[j] + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
+                                tagHTML += '<a href="#" data-tag="' + data[i].tags[j].label + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
                             }
                         }
                         html += '<div class="card"><div class="image"><img src="' +
