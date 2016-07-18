@@ -37,7 +37,7 @@
                     var tagHTML = "";
                     if (data[i].tags) {
                         for (var j = 0; j < data[i].tags.length; j++) {
-                            tagHTML += '<a href="/api/photos/' + data[i].tags[j] + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
+                            tagHTML += '<a href="/api/photos/' + data[i].tags[j].label + '">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
                         }
                     }
                     html += '<div class="card"><div class="image"><img src="' +
