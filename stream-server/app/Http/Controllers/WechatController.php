@@ -57,7 +57,8 @@ class WechatController extends Controller
     {
       $xml = new \DOMDocument();
       $xml->loadXML($sMsg);
-      $msgType = $xml->getElementsByTagName('MsgType')[0]->nodeValue;
+      // server can use xml[0]->nodeValue
+      $msgType = $xml->getElementsByTagName('MsgType')->item(0)->nodeValue;
 
       // todo use service provider.
       $handle = null;
