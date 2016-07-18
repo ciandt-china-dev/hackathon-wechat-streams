@@ -1,6 +1,6 @@
 (function($) {
     $(function() {
-        $('.card img').on('click', function() {
+        $('.cards').on('click', 'img', function() {
             // get img clicked img url
             var imgSrc = $(this).attr('src');
             var modalImg = $('.ui.modal').find('img');
@@ -21,43 +21,37 @@
             return false;
         });
         //detecting if user scroll to bottom
-        window.addEventListener('scroll', function() {
-            if (window.scrollY + screen.height == $(document).height()) {
-                // console.log(window.scrollY);
-                // console.log(screen.height);
-                // console.log($(document).height());
-                // console.log(window.scrollY + screen.height);
-                // $.ajax({
-                // });
-                var html = "",
-                    $container = $('.cards');
-                $.ajax({
-                    url: 'http://localhost:3000/db',
-                    type: 'GET',
-                    success: function(data) {
-                        for (var i = 0; i < data.length; i++) {
-                            var tagHTML = "";
-                            if (data[i].tags) {
-                                for (var j = 0; j < data[i].tags.length;  j++) {
-                                    tagHTML += '<a href="/api/photos/{' + data[i].tags[j] + '}">' + data[i].tags[j]+ '</a>';
-                                }
-                            }
-                            html += '<div class="card"><div class="image"><img src="' +
-                                data[i].picUrl +
-                                '"></div><div class="content"><a class="header">' +
-                                data[i].wxUser +
-                                '</a><div class="meta"><span class="date">' +
-                                data[i].updated_at +
-                                '</span></div>' +
-                                tagHTML +
-                                '<div class="description">' +
-                                tagHTML +
-                                '</div></div></div>';
+        // console.log(window.scrollY);
+        // console.log(screen.height);
+        // console.log($(document).height());
+        // console.log(window.scrollY + screen.height);
+        // $.ajax({
+        // });
+        var html = "",
+            $container = $('.cards');
+        $.ajax({
+            url: 'http://localhost:3000/db',
+            type: 'GET',
+            success: function(data) {
+                for (var i = 0; i < data.length; i++) {
+                    var tagHTML = "";
+                    if (data[i].tags) {
+                        for (var j = 0; j < data[i].tags.length; j++) {
+                            tagHTML += '<a href="/api/photos/{' + data[i].tags[j] + '}">' + '<div class="description">' + data[i].tags[j].label + '</div>' + '</a>';
                         }
-                        $container.append(html);
-                    },
-                });
-            }
+                    }
+                    html += '<div class="card"><div class="image"><img src="' +
+                        data[i].picUrl +
+                        '"></div><div class="content"><a class="header">' +
+                        data[i].wxUser +
+                        '</a><div class="meta"><span class="date">' +
+                        data[i].updated_at +
+                        '</span></div>' +
+                        tagHTML +
+                        '</div></div>';
+                }
+                $container.append(html);
+            },
         });
     });
 })(jQuery);
