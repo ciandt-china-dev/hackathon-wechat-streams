@@ -58,7 +58,7 @@
                             tagHTML +
                             '</div></div>';
                     }
-                    $container.append(html);
+                    $container.html(html);
                 },
             });
         }
