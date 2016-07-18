@@ -20,22 +20,23 @@ class PhotoController extends Controller
         //
     }
 
-    public function index($tag)
+    public function index($label)
     {
-        if ($tag == 'all' || $tag == null)
+        if ($label == 'all' || $label == null)
         {
-            $photos = Image::with('tags')
+            return Image::with('tags')
                 ->take($this->numOfPhotosInAreaPageLoad)
                 ->orderBy('created_at', 'desc')
                 ->get();
         }
         else
         {
-            $photos = Image::with(['tags' => function($query) use ($tag) {
-                $query->where('label', '=', $tag);
-            }])->get();
+            $tag = Tag::where('label','=', $label)->firstOrFail();
+
+            return $tag->images()->get();
+
         }
 
-        return $photos;
+        return [];
     }
 }
